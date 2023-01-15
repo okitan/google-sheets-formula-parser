@@ -18,7 +18,7 @@ SP
 //----
 
 OPERATOR
-  = "+"
+  = PLUS
 
 //----
 // Number
@@ -37,6 +37,9 @@ ZERO
 NONZERODIGIT
   = [1-9]
 
+PLUS
+  = "+"
+
 MINUS
   = "-"
 
@@ -45,7 +48,7 @@ DECIMAL_POINT
 
 // integer
 integer
-  = MINUS? signed_integer  { return new objects.Number(parseInt(text(), 10)) }
+  = (PLUS / MINUS)? signed_integer  { return new objects.Number(parseInt(text(), 10)) }
 
 signed_integer "signed_integer"
   = ZERO / (NONZERODIGIT DIGIT*)
@@ -55,4 +58,4 @@ frac
   = DECIMAL_POINT DIGIT+
 
 float
-  = MINUS? integer frac { return new objects.Number(parseFloat(text())) } 
+  = (PLUS / MINUS)? integer frac { return new objects.Number(parseFloat(text())) } 

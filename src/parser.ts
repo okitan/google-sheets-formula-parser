@@ -214,14 +214,14 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c0 = function(left: any, operator: any, right: any): any { return new objects.Operator(left, operator, right) };
   const peg$c1 = /^[' '\t\r\n]/;
   const peg$c2 = peg$classExpectation(["'", " ", "'", "\t", "\r", "\n"], false, false);
-  const peg$c3 = "+";
-  const peg$c4 = peg$literalExpectation("+", false);
-  const peg$c5 = /^[0-9]/;
-  const peg$c6 = peg$classExpectation([["0", "9"]], false, false);
-  const peg$c7 = "0";
-  const peg$c8 = peg$literalExpectation("0", false);
-  const peg$c9 = /^[1-9]/;
-  const peg$c10 = peg$classExpectation([["1", "9"]], false, false);
+  const peg$c3 = /^[0-9]/;
+  const peg$c4 = peg$classExpectation([["0", "9"]], false, false);
+  const peg$c5 = "0";
+  const peg$c6 = peg$literalExpectation("0", false);
+  const peg$c7 = /^[1-9]/;
+  const peg$c8 = peg$classExpectation([["1", "9"]], false, false);
+  const peg$c9 = "+";
+  const peg$c10 = peg$literalExpectation("+", false);
   const peg$c11 = "-";
   const peg$c12 = peg$literalExpectation("-", false);
   const peg$c13 = ".";
@@ -395,7 +395,7 @@ function peg$parse(input: string, options?: ParseOptions) {
         s2 = null;
       }
       if (s2 as any !== peg$FAILED) {
-        s3 = peg$parseOPERATOR();
+        s3 = peg$parsePLUS();
         if (s3 as any !== peg$FAILED) {
           s4 = peg$parseSP();
           if (s4 as any === peg$FAILED) {
@@ -460,20 +460,6 @@ function peg$parse(input: string, options?: ParseOptions) {
     return s0;
   }
 
-  function peg$parseOPERATOR(): any {
-    let s0;
-
-    if (input.charCodeAt(peg$currPos) === 43) {
-      s0 = peg$c3;
-      peg$currPos++;
-    } else {
-      s0 = peg$FAILED;
-      if (peg$silentFails === 0) { peg$fail(peg$c4); }
-    }
-
-    return s0;
-  }
-
   function peg$parsenumber(): any {
     let s0;
 
@@ -488,12 +474,12 @@ function peg$parse(input: string, options?: ParseOptions) {
   function peg$parseDIGIT(): any {
     let s0;
 
-    if (peg$c5.test(input.charAt(peg$currPos))) {
+    if (peg$c3.test(input.charAt(peg$currPos))) {
       s0 = input.charAt(peg$currPos);
       peg$currPos++;
     } else {
       s0 = peg$FAILED;
-      if (peg$silentFails === 0) { peg$fail(peg$c6); }
+      if (peg$silentFails === 0) { peg$fail(peg$c4); }
     }
 
     return s0;
@@ -503,7 +489,21 @@ function peg$parse(input: string, options?: ParseOptions) {
     let s0;
 
     if (input.charCodeAt(peg$currPos) === 48) {
-      s0 = peg$c7;
+      s0 = peg$c5;
+      peg$currPos++;
+    } else {
+      s0 = peg$FAILED;
+      if (peg$silentFails === 0) { peg$fail(peg$c6); }
+    }
+
+    return s0;
+  }
+
+  function peg$parseNONZERODIGIT(): any {
+    let s0;
+
+    if (peg$c7.test(input.charAt(peg$currPos))) {
+      s0 = input.charAt(peg$currPos);
       peg$currPos++;
     } else {
       s0 = peg$FAILED;
@@ -513,11 +513,11 @@ function peg$parse(input: string, options?: ParseOptions) {
     return s0;
   }
 
-  function peg$parseNONZERODIGIT(): any {
+  function peg$parsePLUS(): any {
     let s0;
 
-    if (peg$c9.test(input.charAt(peg$currPos))) {
-      s0 = input.charAt(peg$currPos);
+    if (input.charCodeAt(peg$currPos) === 43) {
+      s0 = peg$c9;
       peg$currPos++;
     } else {
       s0 = peg$FAILED;
@@ -559,7 +559,10 @@ function peg$parse(input: string, options?: ParseOptions) {
     let s0, s1, s2;
 
     s0 = peg$currPos;
-    s1 = peg$parseMINUS();
+    s1 = peg$parsePLUS();
+    if (s1 as any === peg$FAILED) {
+      s1 = peg$parseMINUS();
+    }
     if (s1 as any === peg$FAILED) {
       s1 = null;
     }
@@ -652,7 +655,10 @@ function peg$parse(input: string, options?: ParseOptions) {
     let s0, s1, s2, s3;
 
     s0 = peg$currPos;
-    s1 = peg$parseMINUS();
+    s1 = peg$parsePLUS();
+    if (s1 as any === peg$FAILED) {
+      s1 = peg$parseMINUS();
+    }
     if (s1 as any === peg$FAILED) {
       s1 = null;
     }
