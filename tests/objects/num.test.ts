@@ -3,7 +3,7 @@ import { Number, parse } from "../../src/";
 describe(Number, () => {
   describe("integer", () => {
     test.each(["-99", "-1", "-0", "0", "+0", "1", "99"])("can be parsed from %s", (s) => {
-      expect(parse(s)).toMatchObject({ type: "Number", value: parseInt(s, 10) });
+      expect(parse(s)).toMatchObject({ type: "Number", literal: s, value: parseInt(s, 10) });
     });
   });
 
@@ -22,18 +22,19 @@ describe(Number, () => {
 
   describe("with operator", () => {
     test.each([
-      ["1+2", 1, "+", 2],
-      ["1+-1", 1, "+", -1],
-      ["1++2", 1, "+", 2],
-      ["-1+-2", -1, "+", -2],
-      ["1 +  2", 1, "+", 2],
-      ["1-2", 1, "-", 2],
-      ["1--1", 1, "-", -1],
-      ["1-+2", 1, "-", 2],
-      ["-1--2", -1, "-", -2],
-    ])("can be prased from %s", (s, left, operator, right) => {
+      ["1+2", "+", 1, 2],
+      ["1 +  2", "+", 1, 2],
+      ["1+-1", "+", 1, -1],
+      ["1++2", "+", 1, 2],
+      ["-1+-2", "+", -1, -2],
+      ["1-2", "-", 1, 2],
+      ["1--1", "-", 1, -1],
+      ["1-+2", "-", 1, 2],
+      ["-1--2", "-", -1, -2],
+    ])("can be prased from %s", (s, operator, left, right) => {
       expect(parse(s)).toMatchObject({
-        type: "Operator",
+        type: "UnaryExpression",
+        literal: s,
         left: { type: "Number", value: left },
         operator,
         right: { type: "Number", value: right },

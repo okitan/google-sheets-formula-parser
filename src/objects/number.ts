@@ -1,5 +1,12 @@
 export class Number {
   type = "Number" as const;
 
-  constructor(public readonly value: number) {}
+  readonly literal: string;
+  readonly value: number;
+
+  constructor(literal: string) {
+    this.literal = literal;
+
+    this.value = parseFloat(literal);
+  }
 }

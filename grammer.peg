@@ -1,10 +1,12 @@
 start 
-  = expr / element
+  = unary_expr / elem
 
-expr
-  = left:element SP? operator:OPERATOR SP? right:element { return new objects.Operator(left, operator, right) }
+unary_expr
+  = left:elem SP? operator:OPERATOR SP? right:elem {
+    return new objects.UnaryExpression({ literal: text(), left, operator, right })
+  }
 
-element 
+elem 
   = number
 
 //----
@@ -48,7 +50,7 @@ DECIMAL_POINT
 
 // integer
 integer
-  = (PLUS / MINUS)? signed_integer  { return new objects.Number(parseInt(text(), 10)) }
+  = (PLUS / MINUS)? signed_integer  { return new objects.Number(text()) }
 
 signed_integer "signed_integer"
   = ZERO / (NONZERODIGIT DIGIT*)
@@ -58,4 +60,4 @@ frac
   = DECIMAL_POINT DIGIT+
 
 float
-  = (PLUS / MINUS)? integer frac { return new objects.Number(parseFloat(text())) } 
+  = (PLUS / MINUS)? integer frac { return new objects.Number(text()) } 

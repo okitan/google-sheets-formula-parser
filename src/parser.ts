@@ -211,7 +211,9 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$startRuleFunctions: {[id: string]: any} = { start: peg$parsestart };
   let peg$startRuleFunction: () => any = peg$parsestart;
 
-  const peg$c0 = function(left: any, operator: any, right: any): any { return new objects.Operator(left, operator, right) };
+  const peg$c0 = function(left: any, operator: any, right: any): any {
+      return new objects.UnaryExpression({ literal: text(), left, operator, right })
+    };
   const peg$c1 = /^[' '\t\r\n]/;
   const peg$c2 = peg$classExpectation(["'", " ", "'", "\t", "\r", "\n"], false, false);
   const peg$c3 = /^[0-9]/;
@@ -226,9 +228,8 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c12 = peg$literalExpectation("-", false);
   const peg$c13 = ".";
   const peg$c14 = peg$literalExpectation(".", false);
-  const peg$c15 = function(): any { return new objects.Number(parseInt(text(), 10)) };
+  const peg$c15 = function(): any { return new objects.Number(text()) };
   const peg$c16 = peg$otherExpectation("signed_integer");
-  const peg$c17 = function(): any { return new objects.Number(parseFloat(text())) };
 
   let peg$currPos = 0;
   let peg$savedPos = 0;
@@ -376,7 +377,7 @@ function peg$parse(input: string, options?: ParseOptions) {
   function peg$parsestart(): any {
     let s0;
 
-    s0 = peg$parseexpr();
+    s0 = peg$parseunary_expr();
     if (s0 as any === peg$FAILED) {
       s0 = peg$parsenumber();
     }
@@ -384,7 +385,7 @@ function peg$parse(input: string, options?: ParseOptions) {
     return s0;
   }
 
-  function peg$parseexpr(): any {
+  function peg$parseunary_expr(): any {
     let s0, s1, s2, s3, s4, s5;
 
     s0 = peg$currPos;
@@ -679,7 +680,7 @@ function peg$parse(input: string, options?: ParseOptions) {
         s3 = peg$parsefrac();
         if (s3 as any !== peg$FAILED) {
           peg$savedPos = s0;
-          s1 = peg$c17();
+          s1 = peg$c15();
           s0 = s1;
         } else {
           peg$currPos = s0;

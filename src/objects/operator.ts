@@ -1,7 +1,18 @@
 import { Number } from "./number";
 
-export class Operator {
-  type = "Operator" as const;
+export class UnaryExpression {
+  type = "UnaryExpression" as const;
 
-  constructor(public readonly left: Number, public readonly operator: string, public readonly right: Number) {}
+  readonly literal: string;
+  readonly left: Number;
+  readonly operator: string;
+  readonly right: Number;
+
+  constructor({ literal, left, operator, right }: { literal: string; left: Number; operator: string; right: Number }) {
+    this.literal = literal;
+
+    this.left = left;
+    this.operator = operator;
+    this.right = right;
+  }
 }

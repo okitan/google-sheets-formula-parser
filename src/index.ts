@@ -1,4 +1,4 @@
-import { Number, Operator } from "./objects";
+import { Number, UnaryExpression } from "./objects";
 import { parse as _parse } from "./parser";
 
 export * from "./objects";
@@ -12,9 +12,9 @@ export function parse(str: string) {
 }
 
 // TODO: I'd like to generate
-export type ParseResult = Number | Operator;
+export type ParseResult = Number | UnaryExpression;
 function assertParsed(parsed: any): asserts parsed is ParseResult {
-  const types = ["Number", "Operator"];
+  const types = ["Number", "UnaryExpression"];
 
   if (!types.includes(parsed.type)) throw new Error(`parse result is not one of ${types}`);
 }
