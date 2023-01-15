@@ -4,8 +4,31 @@ start
 element 
   = number
 
+//-----
+// Number
+//----
+
 number
   = integer
 
-integer "integer"
-  = digits:[0-9]+ { return new objects.Number(parseInt(digits.join(""), 10)) }
+// Number core
+digit
+  = [0-9]
+
+zero
+  = "0"
+
+digit1_9
+  = [1-9]
+
+minus
+  = "-"
+
+// int
+integer
+  = minus? signed_integer  { return new objects.Number(parseInt(text(), 10)) }
+
+signed_integer "signed_integer"
+  = zero / (digit1_9 digit*)
+
+// float
