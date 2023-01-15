@@ -2,10 +2,16 @@ start
   = expr / element
 
 expr
-  = left:element operator:OPERATOR right:element { return new objects.Operator(left, operator, right) }
+  = left:element SP? operator:OPERATOR SP? right:element { return new objects.Operator(left, operator, right) }
 
 element 
   = number
+
+//----
+// General
+//----
+SP
+  = [' '\t\r\n]+
 
 //----
 // Operator
