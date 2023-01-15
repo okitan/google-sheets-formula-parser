@@ -27,6 +27,10 @@ describe(Number, () => {
       ["1++2", 1, "+", 2],
       ["-1+-2", -1, "+", -2],
       ["1 +  2", 1, "+", 2],
+      ["1-2", 1, "-", 2],
+      ["1--1", 1, "-", -1],
+      ["1-+2", 1, "-", 2],
+      ["-1--2", -1, "-", -2],
     ])("can be prased from %s", (s, left, operator, right) => {
       expect(parse(s)).toMatchObject({
         type: "Operator",

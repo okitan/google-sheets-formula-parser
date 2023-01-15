@@ -395,7 +395,7 @@ function peg$parse(input: string, options?: ParseOptions) {
         s2 = null;
       }
       if (s2 as any !== peg$FAILED) {
-        s3 = peg$parsePLUS();
+        s3 = peg$parseOPERATOR();
         if (s3 as any !== peg$FAILED) {
           s4 = peg$parseSP();
           if (s4 as any === peg$FAILED) {
@@ -455,6 +455,17 @@ function peg$parse(input: string, options?: ParseOptions) {
       }
     } else {
       s0 = peg$FAILED;
+    }
+
+    return s0;
+  }
+
+  function peg$parseOPERATOR(): any {
+    let s0;
+
+    s0 = peg$parsePLUS();
+    if (s0 as any === peg$FAILED) {
+      s0 = peg$parseMINUS();
     }
 
     return s0;
