@@ -1,10 +1,20 @@
 start 
-  = element
+  = expr / element
+
+expr
+  = left:element operator:OPERATOR right:element { return new objects.Operator(left, operator, right) }
 
 element 
   = number
 
-//-----
+//----
+// Operator
+//----
+
+OPERATOR
+  = "+"
+
+//----
 // Number
 //----
 
