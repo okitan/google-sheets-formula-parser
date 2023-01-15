@@ -2,8 +2,8 @@ start
   = unary_expr / elem
 
 unary_expr
-  = left:elem SP? operator:OPERATOR SP? right:elem {
-    return new objects.UnaryExpression({ literal: text(), left, operator, right })
+  = head:elem SP? tails:(OPERATOR SP? elem)+ {
+    return objects.buildUnaryExpression({ literal: text(), head, tails })
   }
 
 elem 

@@ -1,5 +1,17 @@
 import { Number, parse } from "../../src/";
 
+function unaryExpressionWithoutLiteral(expr: string) {
+  const result = parse(expr);
+
+  if (result.type === "UnaryExpression") {
+    const { type, operator, left, right } = result;
+
+    return { type, operator, left, right };
+  } else {
+    return result;
+  }
+}
+
 describe(Number, () => {
   describe("integer", () => {
     test.each(["-99", "-1", "-0", "0", "+0", "1", "99"])("can be parsed from %s", (s) => {
@@ -38,6 +50,22 @@ describe(Number, () => {
         left: { type: "Number", value: left },
         operator,
         right: { type: "Number", value: right },
+      });
+    });
+
+    describe("with operators", () => {
+      test.each([
+        ["1+2+3", "+", "1+2", "3"],
+        ["1+2+3+4", "+", "1+2+3", "4"],
+        ["1-2+3", "+", "1-2", "3"],
+      ])("can be prased from %s", (s, operator, left, right) => {
+        expect(parse(s)).toMatchObject({
+          type: "UnaryExpression",
+          literal: s,
+          left: unaryExpressionWithoutLiteral(left),
+          operator,
+          right: unaryExpressionWithoutLiteral(right),
+        });
       });
     });
   });
