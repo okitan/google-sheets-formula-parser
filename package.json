@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
-  "dependencies": {},
   "devDependencies": {
+    "@types/jest": "^29.2.5",
     "prettier": "2.8.3",
     "ts-jest": "29.0.5",
     "ts-node": "10.9.1",
@@ -12,7 +12,8 @@
     "typescript": "4.9.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "node  generate.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",

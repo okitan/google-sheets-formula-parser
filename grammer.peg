@@ -1,0 +1,11 @@
+start 
+  = element
+
+element 
+  = number
+
+number
+  = integer
+
+integer "integer"
+  = digits:[0-9]+ { return new objects.Number(parseInt(digits.join(""), 10)) }
