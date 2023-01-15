@@ -1,0 +1,27 @@
+{
+  "name": "@okitan/google-sheets-gormula-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "prettier": "2.8.3",
+    "ts-jest": "29.0.5",
+    "ts-node": "10.9.1",
+    "ts-pegjs": "3.0.0",
+    "typescript": "4.9.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okitan/google-sheets-formula-parser.git"
+  },
+  "author": "okitan <okitakunio@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/okitan/google-sheets-formula-parser/issues"
+  },
+  "homepage": "https://github.com/okitan/google-sheets-formula-parser#readme"
+}
