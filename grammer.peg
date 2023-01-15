@@ -9,26 +9,34 @@ element
 //----
 
 number
-  = integer
+  = float / integer
 
 // Number core
-digit
+DIGIT
   = [0-9]
 
-zero
+ZERO
   = "0"
 
-digit1_9
+NONZERODIGIT
   = [1-9]
 
-minus
+MINUS
   = "-"
 
-// int
+DECIMAL_POINT
+  = "."
+
+// integer
 integer
-  = minus? signed_integer  { return new objects.Number(parseInt(text(), 10)) }
+  = MINUS? signed_integer  { return new objects.Number(parseInt(text(), 10)) }
 
 signed_integer "signed_integer"
-  = zero / (digit1_9 digit*)
+  = ZERO / (NONZERODIGIT DIGIT*)
 
 // float
+frac
+  = DECIMAL_POINT DIGIT+
+
+float
+  = MINUS? integer frac { return new objects.Number(parseFloat(text())) } 
