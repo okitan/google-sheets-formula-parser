@@ -14,14 +14,25 @@ function unaryExpressionWithoutLiteral(expr: string) {
 
 describe(Number, () => {
   describe("integer", () => {
-    test.each(["-99", "-1", "-0", "0", "+0", "1", "99", "++1", "--1", "+-+-1"])("can be parsed from %s", (s) => {
+    test.each(["-99", "-1", "-0", "0", "+0", "1", "99"])("can be parsed from %s", (s) => {
       expect(parse(s)).toMatchObject({ type: "Number", literal: s, value: parseInt(s, 10) });
+    });
+    test.each([
+      ["--1", 1],
+      ["++1", 1],
+      ["-+1", -1],
+      ["+-+-1", 1],
+    ])("can be parsed from %s to %s", (s, v) => {
+      expect(parse(s)).toMatchObject({ type: "Number", literal: s, value: v });
     });
   });
 
   describe("float", () => {
     test.each(["-10.01", "-0.01", "-0.0", "0.0", "+0.0", "0.01", "10.01"])("can be parsed from %s", (s) => {
-      expect(parse(s)).toMatchObject({ type: "Number", value: parseFloat(s) });
+      expect(parse(s)).toMatchObject({ type: "Number", literal: s, value: parseFloat(s) });
+    });
+    test.each([["--0.01", 0.01]])("can be parsed from %s to %s", (s, v) => {
+      expect(parse(s)).toMatchObject({ type: "Number", literal: s, value: v });
     });
   });
 

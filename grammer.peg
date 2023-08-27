@@ -50,14 +50,32 @@ DECIMAL_POINT
 
 // integer
 integer
-  = (PLUS / MINUS)* signed_integer  { return new objects.Number(text()) }
+  = s:SIGN i:signed_integer  {
+    const negative = s.filter((e) => e === "-").length % 2 === 1;
+    return { 
+      type: "Number",
+      literal: text(),
+      value: i.value * (negative ? -1 : 1),
+      negative
+    }
+  }
 
-signed_integer "signed_integer"
-  = ZERO / (NONZERODIGIT DIGIT*)
+SIGN
+  = (PLUS / MINUS)*
+
+signed_integer
+  =   ZERO { return new objects.Number(0) } 
+    / (NONZERODIGIT DIGIT*) { return new objects.Number(text()) }
 
 // float
 frac
-  = DECIMAL_POINT DIGIT+
+  = DECIMAL_POINT DIGIT+ { return new objects.Number(`0${text()}`) }
 
 float
-  = integer frac { return new objects.Number(text()) } 
+  = i:integer f:frac {
+    return {
+      type: "Number",
+      literal: text(),
+      value: i.value + f.value * (i.negative ? -1 : 1)
+    }
+  } 
