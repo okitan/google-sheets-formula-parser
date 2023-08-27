@@ -14,7 +14,7 @@ function unaryExpressionWithoutLiteral(expr: string) {
 
 describe(Number, () => {
   describe("integer", () => {
-    test.each(["-99", "-1", "-0", "0", "+0", "1", "99"])("can be parsed from %s", (s) => {
+    test.each(["-99", "-1", "-0", "0", "+0", "1", "99", "++1", "--1", "+-+-1"])("can be parsed from %s", (s) => {
       expect(parse(s)).toMatchObject({ type: "Number", literal: s, value: parseInt(s, 10) });
     });
   });
@@ -27,7 +27,7 @@ describe(Number, () => {
 
   describe("invalid case", () => {
     // FIXME: --0, ++0 is actually valid
-    test.each(["--0", "++0", "-00", "00", "00.0"])("considers invalid against %s", (s) => {
+    test.each(["-00", "00", "00.0"])("considers invalid against %s", (s) => {
       expect(() => parse(s)).toThrowError();
     });
   });

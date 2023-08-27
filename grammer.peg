@@ -50,7 +50,7 @@ DECIMAL_POINT
 
 // integer
 integer
-  = (PLUS / MINUS)? signed_integer  { return new objects.Number(text()) }
+  = (PLUS / MINUS)* signed_integer  { return new objects.Number(text()) }
 
 signed_integer "signed_integer"
   = ZERO / (NONZERODIGIT DIGIT*)
@@ -60,4 +60,4 @@ frac
   = DECIMAL_POINT DIGIT+
 
 float
-  = (PLUS / MINUS)? integer frac { return new objects.Number(text()) } 
+  = integer frac { return new objects.Number(text()) } 
