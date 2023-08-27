@@ -99,7 +99,7 @@ ESCAPED_CHAR = '""'
 DOUBLE_QUOTE = '"'
 
 // string
-string = DOUBLE_QUOTE s:(CHAR / ESCAPED_CHAR)* DOUBLE_QUOTE { return new objects.String({ literal: text(), value: s.join("") }) }
+string = DOUBLE_QUOTE s:(CHAR / ESCAPED_CHAR)* DOUBLE_QUOTE { return objects.String({ literal: text(), value: s.join("") }) }
 
 //----
 // Operator

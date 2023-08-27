@@ -257,7 +257,7 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c27 = peg$literalExpectation("\"\"", false);
   const peg$c28 = "\"";
   const peg$c29 = peg$literalExpectation("\"", false);
-  const peg$c30 = function(s: any): any { return new objects.String({ literal: text(), value: s.join("") }) };
+  const peg$c30 = function(s: any): any { return objects.String({ literal: text(), value: s.join("") }) };
   const peg$c31 = "*";
   const peg$c32 = peg$literalExpectation("*", false);
   const peg$c33 = "/";

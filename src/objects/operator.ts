@@ -1,30 +1,18 @@
-import { Number } from "./number";
+import type { Expression } from "../objects";
 
-export class UnaryExpression {
-  type = "UnaryExpression" as const;
+export type UnaryExpression = {
+  type: "UnaryExpression";
+  literal?: string;
+  operator: string;
+  left: Expression;
+  right: Expression;
+};
 
-  readonly literal?: string;
-  readonly operator: string;
-  readonly left: Number | UnaryExpression;
-  readonly right: Number | UnaryExpression;
-
-  constructor({
-    literal,
-    left,
-    operator,
-    right,
-  }: {
-    literal?: string;
-    operator: string;
-    left: Number | UnaryExpression;
-    right: Number | UnaryExpression;
-  }) {
-    this.literal = literal;
-
-    this.operator = operator;
-    this.left = left;
-    this.right = right;
-  }
+export function UnaryExpression(obj: Omit<UnaryExpression, "type">): UnaryExpression {
+  return {
+    type: "UnaryExpression",
+    ...obj,
+  };
 }
 
 export function buildUnaryExpression({
@@ -33,14 +21,14 @@ export function buildUnaryExpression({
   tails,
 }: {
   literal?: string;
-  head: Number;
-  tails: Array<[string, string, string, Number]>;
-}) {
-  return tails.reduce<Number | UnaryExpression>(
+  head: Expression;
+  tails: Array<[string, string, string, Expression]>;
+}): Expression {
+  return tails.reduce<Expression>(
     (left, [_, operator, __, right], i) =>
       i === tails.length - 1
-        ? new UnaryExpression({ literal, left, operator, right })
-        : new UnaryExpression({ left, operator, right }),
+        ? UnaryExpression({ literal, left, operator, right })
+        : UnaryExpression({ left, operator, right }),
     head
   );
 }

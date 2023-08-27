@@ -1,11 +1,12 @@
-export class String {
-  type = "String" as const;
+export type String = {
+  type: "String";
+  literal: string;
+  value: string;
+};
 
-  readonly literal: string;
-  readonly value: string;
-
-  constructor({ literal, value }: { literal: string; value: string }) {
-    this.literal = literal;
-    this.value = value;
-  }
+export function String(str: { literal: string; value: string }): String {
+  return {
+    type: "String",
+    ...str,
+  };
 }
