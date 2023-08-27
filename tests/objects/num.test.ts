@@ -1,5 +1,5 @@
 import { Number, parse } from "../../src/";
-import { buildUnAryExpressionMatcher, unaryExpressionWithoutLiteral } from "../helpers/parser";
+import { buildUnAryExpressionMatcher } from "../helpers/parser";
 
 describe(Number, () => {
   describe("integer", () => {
@@ -59,7 +59,7 @@ describe(Number, () => {
 
     describe("with operators", () => {
       test.each([
-        ["1 + 2 + 3", "+", "1+2", "3"],
+        ["1 + 2 + 3", "+", "1 + 2", "3"],
         ["1+2+3+4", "+", "1+2+3", "4"],
         ["1-2+3", "+", "1-2", "3"],
         ["1*2+3", "+", "1*2", "3"],
@@ -74,10 +74,10 @@ describe(Number, () => {
 
     describe("with operators and parenthesis", () => {
       test.each([
-        ["(1+2)", "+", "1", "2"],
+        ["( 1 + 2 )", "+", "1", "2"],
         ["(1+2)+3", "+", "(1+2)", "3"],
         ["(1+2)*3", "*", "(1+2)", "3"],
-        ["(1+2)*(3-4)", "*", "(1+2)", "(3-4)"],
+        ["(1 + 2) * (3 - 4)", "*", "(1 + 2)", "(3 - 4)"],
         ["(1+2)*(3-4)+5", "+", "(1+2)*(3-4)", "5"],
         ["(1*(2+3))/4", "/", "(1*(2+3))", "4"],
       ])("can be prased from %s", (s, operator, left, right) => {

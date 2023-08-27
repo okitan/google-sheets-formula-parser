@@ -29,34 +29,12 @@ export function buildUnAryExpressionMatcher({
   return {
     type: "UnaryExpression",
     literal,
-    left: eliminateLiteral(leftMatcher),
+    left: leftMatcher,
     operator,
-    right: eliminateLiteral(rightMatcher),
+    right: rightMatcher,
   };
 }
 
 export function parseAsString(expr: string) {
   return expr.startsWith(`"`) && expr.endsWith(`"`) ? parse(expr) : parse(`"${expr}"`);
-}
-
-export function unaryExpressionWithoutLiteral(expr: string) {
-  const result = parse(expr);
-
-  if (result.type === "UnaryExpression") {
-    const { type, operator, left, right } = result;
-
-    return { type, operator, left, right };
-  } else {
-    return result;
-  }
-}
-
-function eliminateLiteral(result: ParseResult) {
-  if (result.type === "UnaryExpression") {
-    const { type, operator, left, right } = result;
-
-    return { type, operator, left, right };
-  } else {
-    return result;
-  }
 }
