@@ -33,7 +33,7 @@ ADDITIVE_OPERATOR
   = PLUS / MINUS
 
 MULTIPLICATIVE_OPERATOR
-  = MULTIPLY
+  = MULTIPLY / DIVIDE
 
 //----
 // Number
@@ -60,6 +60,9 @@ MINUS
 
 MULTIPLY
   = "*"
+
+DIVIDE
+  = "/"
 
 DECIMAL_POINT
   = "."
