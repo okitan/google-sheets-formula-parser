@@ -86,5 +86,24 @@ describe(Number, () => {
         });
       });
     });
+
+    describe("with operators and parenthesis", () => {
+      test.each([
+        ["(1+2)", "+", "1", "2"],
+        ["(1+2)+3", "+", "(1+2)", "3"],
+        ["(1+2)*3", "*", "(1+2)", "3"],
+        ["(1+2)*(3-4)", "*", "(1+2)", "(3-4)"],
+        ["(1+2)*(3-4)+5", "+", "(1+2)*(3-4)", "5"],
+        ["(1*(2+3))/4", "/", "(1*(2+3))", "4"],
+      ])("can be prased from %s", (s, operator, left, right) => {
+        expect(parse(s)).toMatchObject({
+          type: "UnaryExpression",
+          literal: s,
+          left: unaryExpressionWithoutLiteral(left),
+          operator,
+          right: unaryExpressionWithoutLiteral(right),
+        });
+      });
+    });
   });
 });

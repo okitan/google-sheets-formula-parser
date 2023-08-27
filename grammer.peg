@@ -8,10 +8,16 @@ additive_expr
   / multiplicative_expr
 
 multiplicative_expr
-  = head:elem SP? tails:(MULTIPLICATIVE_OPERATOR SP? elem)+ {
+  = head:primary_expr SP? tails:(MULTIPLICATIVE_OPERATOR SP? primary_expr)+ {
       return objects.buildUnaryExpression({ literal: text(), head, tails })
     }
-  / elem
+  / primary_expr
+
+primary_expr
+  = elem
+  / LPAREN SP? e:additive_expr SP? RPAREN { 
+    return { ...e, literal: text() };
+  }
 
 elem 
   = number
@@ -21,6 +27,12 @@ elem
 //----
 SP
   = [' '\t\r\n]+
+
+LPAREN
+  = "("
+
+RPAREN
+  = ")"
 
 //----
 // Operator
