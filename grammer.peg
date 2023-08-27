@@ -2,16 +2,14 @@ start
   = additive_expr
 
 additive_expr
-  = head:multiplicative_expr tails:(SP? ADDITIVE_OPERATOR SP? multiplicative_expr)+ {
+  = head:multiplicative_expr tails:(SP? ADDITIVE_OPERATOR SP? multiplicative_expr)* {
       return objects.buildUnaryExpression({ literal: text(), head, tails })
     } 
-  / multiplicative_expr
 
 multiplicative_expr
-  = head:primary_expr tails:(SP? MULTIPLICATIVE_OPERATOR SP? primary_expr)+ {
+  = head:primary_expr tails:(SP? MULTIPLICATIVE_OPERATOR SP? primary_expr)* {
       return objects.buildUnaryExpression({ literal: text(), head, tails })
     }
-  / primary_expr
 
 primary_expr
   = elem
