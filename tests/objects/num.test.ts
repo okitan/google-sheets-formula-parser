@@ -1,16 +1,5 @@
 import { Number, parse } from "../../src/";
-
-function unaryExpressionWithoutLiteral(expr: string) {
-  const result = parse(expr);
-
-  if (result.type === "UnaryExpression") {
-    const { type, operator, left, right } = result;
-
-    return { type, operator, left, right };
-  } else {
-    return result;
-  }
-}
+import { buildUnAryExpressionMatcher, unaryExpressionWithoutLiteral } from "../helpers/parser";
 
 describe(Number, () => {
   describe("integer", () => {
@@ -54,6 +43,8 @@ describe(Number, () => {
       ["1--1", "-", 1, -1],
       ["1-+2", "-", 1, 2],
       ["-1--2", "-", -1, -2],
+      ["-1---2", "-", -1, 2],
+      ["--1--2", "-", 1, -2],
       ["1*2", "*", 1, 2],
       ["1/3", "/", 1, 3],
     ])("can be prased from %s", (s, operator, left, right) => {
@@ -68,7 +59,7 @@ describe(Number, () => {
 
     describe("with operators", () => {
       test.each([
-        ["1+2+3", "+", "1+2", "3"],
+        ["1 + 2 + 3", "+", "1+2", "3"],
         ["1+2+3+4", "+", "1+2+3", "4"],
         ["1-2+3", "+", "1-2", "3"],
         ["1*2+3", "+", "1*2", "3"],
@@ -77,13 +68,7 @@ describe(Number, () => {
         ["1*2+3*4", "+", "1*2", "3*4"],
         ["1-2/3+4", "+", "1-2/3", "4"],
       ])("can be prased from %s", (s, operator, left, right) => {
-        expect(parse(s)).toMatchObject({
-          type: "UnaryExpression",
-          literal: s,
-          left: unaryExpressionWithoutLiteral(left),
-          operator,
-          right: unaryExpressionWithoutLiteral(right),
-        });
+        expect(parse(s)).toMatchObject(buildUnAryExpressionMatcher({ literal: s, left, operator, right }));
       });
     });
 
@@ -96,13 +81,7 @@ describe(Number, () => {
         ["(1+2)*(3-4)+5", "+", "(1+2)*(3-4)", "5"],
         ["(1*(2+3))/4", "/", "(1*(2+3))", "4"],
       ])("can be prased from %s", (s, operator, left, right) => {
-        expect(parse(s)).toMatchObject({
-          type: "UnaryExpression",
-          literal: s,
-          left: unaryExpressionWithoutLiteral(left),
-          operator,
-          right: unaryExpressionWithoutLiteral(right),
-        });
+        expect(parse(s)).toMatchObject(buildUnAryExpressionMatcher({ literal: s, left, operator, right }));
       });
     });
   });

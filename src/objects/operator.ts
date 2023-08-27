@@ -34,10 +34,10 @@ export function buildUnaryExpression({
 }: {
   literal?: string;
   head: Number;
-  tails: Array<[string, string, Number]>;
+  tails: Array<[string, string, string, Number]>;
 }) {
   return tails.reduce<Number | UnaryExpression>(
-    (left, [operator, _, right], i) =>
+    (left, [_, operator, __, right], i) =>
       i === tails.length - 1
         ? new UnaryExpression({ literal, left, operator, right })
         : new UnaryExpression({ left, operator, right }),

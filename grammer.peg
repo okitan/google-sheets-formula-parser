@@ -2,13 +2,13 @@ start
   = additive_expr
 
 additive_expr
-  = head:multiplicative_expr SP? tails:(ADDITIVE_OPERATOR SP? multiplicative_expr)+ {
+  = head:multiplicative_expr tails:(SP? ADDITIVE_OPERATOR SP? multiplicative_expr)+ {
       return objects.buildUnaryExpression({ literal: text(), head, tails })
     } 
   / multiplicative_expr
 
 multiplicative_expr
-  = head:primary_expr SP? tails:(MULTIPLICATIVE_OPERATOR SP? primary_expr)+ {
+  = head:primary_expr tails:(SP? MULTIPLICATIVE_OPERATOR SP? primary_expr)+ {
       return objects.buildUnaryExpression({ literal: text(), head, tails })
     }
   / primary_expr
@@ -35,19 +35,6 @@ RPAREN
   = ")"
 
 //----
-// Operator
-//----
-
-OPERATOR
-  = ADDITIVE_OPERATOR
-
-ADDITIVE_OPERATOR
-  = PLUS / MINUS
-
-MULTIPLICATIVE_OPERATOR
-  = MULTIPLY / DIVIDE
-
-//----
 // Number
 //----
 
@@ -70,12 +57,6 @@ PLUS
 MINUS
   = "-"
 
-MULTIPLY
-  = "*"
-
-DIVIDE
-  = "/"
-
 DECIMAL_POINT
   = "."
 
@@ -83,33 +64,30 @@ DECIMAL_POINT
 integer
   = s:SIGN i:signed_integer  {
     const negative = s.filter((e) => e === "-").length % 2 === 1;
-    return { 
-      type: "Number",
+    return objects.Number({ 
       literal: text(),
       value: i.value * (negative ? -1 : 1),
       negative
-    }
+    })
   }
 
 SIGN
   = (PLUS / MINUS)*
 
 signed_integer
-  = ZERO                  { return new objects.Number("0") } 
-  / (NONZERODIGIT DIGIT*) { return new objects.Number(text()) }
+  = (ZERO  / (NONZERODIGIT DIGIT*)) { return new objects.parseAsNumber(text()) }
 
 // float
 float
   = i:integer f:frac {
-    return {
-      type: "Number",
+    return objects.Number({
       literal: text(),
       value: i.value + f.value * (i.negative ? -1 : 1)
-    }
+    });
   } 
 
 frac
-  = DECIMAL_POINT DIGIT+ { return new objects.Number(`0${text()}`) }
+  = DECIMAL_POINT DIGIT+ { return new objects.parseAsNumber(`0${text()}`) }
 
 //----
 // string
@@ -122,3 +100,25 @@ DOUBLE_QUOTE = '"'
 
 // string
 string = DOUBLE_QUOTE s:(CHAR / ESCAPED_CHAR)* DOUBLE_QUOTE { return new objects.String({ literal: text(), value: s.join("") }) }
+
+//----
+// Operator
+//----
+
+OPERATOR
+  = ADDITIVE_OPERATOR
+
+ADDITIVE_OPERATOR
+  = PLUS / MINUS / AMBASSADOR
+
+MULTIPLICATIVE_OPERATOR
+  = MULTIPLY / DIVIDE
+
+MULTIPLY
+  = "*"
+
+DIVIDE
+  = "/"
+
+AMBASSADOR
+  = "&"

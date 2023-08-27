@@ -1,12 +1,21 @@
-export class Number {
-  type = "Number" as const;
+export type Number = {
+  type: "Number";
+  literal: string;
+  value: number;
+  negative?: boolean; // for -0.1 which parsed -0 / .1
+};
 
-  readonly literal: string;
-  readonly value: number;
+export function Number(num: { literal: string; value: number; negative?: boolean }): Number {
+  return {
+    type: "Number",
+    ...num,
+  };
+}
 
-  constructor(literal: string) {
-    this.literal = literal;
-
-    this.value = parseFloat(literal);
-  }
+export function parseAsNumber(literal: string): Number {
+  return {
+    type: "Number",
+    literal,
+    value: parseFloat(literal),
+  };
 }
