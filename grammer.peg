@@ -20,7 +20,7 @@ primary_expr
   }
 
 elem 
-  = number
+  = number / string
 
 //----
 // General
@@ -110,3 +110,15 @@ float
 
 frac
   = DECIMAL_POINT DIGIT+ { return new objects.Number(`0${text()}`) }
+
+//----
+// string
+//----
+
+CHAR = [a-zA-Z0-9_!@#$%^&*()\-+=\[\]{};:',.<>/?\\' '\t\r\n\u0080-\uFFFF]
+ESCAPED_CHAR = '""'
+
+DOUBLE_QUOTE = '"'
+
+// string
+string = DOUBLE_QUOTE s:(CHAR / ESCAPED_CHAR)* DOUBLE_QUOTE { return new objects.String({ literal: text(), value: s.join("") }) }

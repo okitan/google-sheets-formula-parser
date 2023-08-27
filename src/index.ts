@@ -14,7 +14,7 @@ export function parse(str: string) {
 // TODO: I'd like to generate
 export type ParseResult = Number | UnaryExpression;
 function assertParsed(parsed: any): asserts parsed is ParseResult {
-  const types = ["Number", "UnaryExpression"];
+  const types = ["Number", "String", "UnaryExpression"];
 
   if (!types.includes(parsed.type)) throw new Error(`parse result is not one of ${types}`);
 }
