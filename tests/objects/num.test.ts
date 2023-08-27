@@ -54,6 +54,7 @@ describe(Number, () => {
       ["1--1", "-", 1, -1],
       ["1-+2", "-", 1, 2],
       ["-1--2", "-", -1, -2],
+      ["1*2", "*", 1, 2],
     ])("can be prased from %s", (s, operator, left, right) => {
       expect(parse(s)).toMatchObject({
         type: "UnaryExpression",
@@ -69,6 +70,8 @@ describe(Number, () => {
         ["1+2+3", "+", "1+2", "3"],
         ["1+2+3+4", "+", "1+2+3", "4"],
         ["1-2+3", "+", "1-2", "3"],
+        ["1*2+3", "+", "1*2", "3"],
+        ["1+2*3", "+", "1", "2*3"],
       ])("can be prased from %s", (s, operator, left, right) => {
         expect(parse(s)).toMatchObject({
           type: "UnaryExpression",
