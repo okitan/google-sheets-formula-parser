@@ -1,11 +1,11 @@
-import type { Expression } from "../objects";
+import type { ParseResult } from "../";
 
 export type UnaryExpression = {
   type: "UnaryExpression";
   literal: string;
   operator: string;
-  left: Expression;
-  right: Expression;
+  left: ParseResult;
+  right: ParseResult;
 };
 
 export function UnaryExpression(obj: Omit<UnaryExpression, "type">): UnaryExpression {
@@ -21,10 +21,10 @@ export function buildUnaryExpression({
   tails,
 }: {
   literal: string;
-  head: Expression;
-  tails: Array<[string, string, string, Expression]>;
-}): Expression {
-  return tails.reduce<Expression>((left, tail, i) => {
+  head: ParseResult;
+  tails: Array<[string, string, string, ParseResult]>;
+}): ParseResult {
+  return tails.reduce<ParseResult>((left, tail, i) => {
     const [leftSpace, operator, rightSpace, right] = tail;
     return i === tails.length - 1
       ? UnaryExpression({ literal, left, operator, right })

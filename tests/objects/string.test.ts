@@ -18,7 +18,7 @@ describe(String, () => {
     expect(parse(s)).toMatchObject(buildUnAryExpressionMatcher({ literal: s, left, operator, right, asString: true }));
   });
 
-  test.each([`"`])(`considers invalid against '%s'`, (s) => {
+  test.each([`"`, `"a"b"`])(`considers invalid against '%s'`, (s) => {
     expect(() => parse(s)).toThrowError();
   });
 });

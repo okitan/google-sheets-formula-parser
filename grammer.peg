@@ -17,8 +17,9 @@ primary_expr
     return { ...e, literal: text() };
   }
 
+// a1 involves number
 elem 
-  = number / string
+  = a1_notation/ number / string
 
 //----
 // General
@@ -41,12 +42,12 @@ number
 
 // Number core
 DIGIT
-  = [0-9]
+  = ZERO / NONZERO_DIGIT
 
 ZERO
   = "0"
 
-NONZERODIGIT
+NONZERO_DIGIT
   = [1-9]
 
 PLUS
@@ -73,7 +74,7 @@ SIGN
   = (PLUS / MINUS)*
 
 signed_integer
-  = (ZERO  / (NONZERODIGIT DIGIT*)) { return new objects.parseAsNumber(text()) }
+  = (ZERO  / (NONZERO_DIGIT DIGIT*)) { return new objects.parseAsNumber(text()) }
 
 // float
 float
@@ -91,13 +92,50 @@ frac
 // string
 //----
 
-CHAR = [a-zA-Z0-9_!@#$%^&*()\-+=\[\]{};:',.<>/?\\' '\t\r\n\u0080-\uFFFF]
-ESCAPED_CHAR = '""'
+ALPHA 
+  = LOWER_ALPHA / UPPER_ALPHA
+LOWER_ALPHA 
+  = [a-z]
+UPPER_ALPHA 
+  = [A-Z]
 
-DOUBLE_QUOTE = '"'
+ALNUM = ALPHA / DIGIT
+
+CHAR 
+  = ALNUM / [_!@#$%^&*()\-+=\[\]{};:',.<>/?\\' '\t\r\n\u0080-\uFFFF]
+ESCAPED_CHAR 
+  = '""'
+
+DOUBLE_QUOTE 
+  = '"'
 
 // string
 string = DOUBLE_QUOTE s:(CHAR / ESCAPED_CHAR)* DOUBLE_QUOTE { return objects.String({ literal: text(), value: s.join("") }) }
+
+
+//----
+// symbol
+//----
+
+// range involves cell
+a1_notation 
+  = range/ cell
+
+DELIMITER
+  = ":"
+
+COLUMN
+  = [A-Z]+
+
+ROW
+  = NONZERO_DIGIT DIGIT*
+
+cell
+  = COLUMN ROW { return objects.parseNotation(text()) }
+
+range
+  = (COLUMN ROW?) DELIMITER (COLUMN ROW?) { return objects.parseNotation(text()) }
+  / (COLUMN? ROW) DELIMITER (COLUMN? ROW) { return objects.parseNotation(text()) }
 
 //----
 // Operator
