@@ -15,6 +15,7 @@ primary_expr
   = f:function LPAREN SP? head:additive_expr? tails:(SP? COMMNA SP? additive_expr)* SP? RPAREN { 
     return objects.buildFunction({ literal: text(), name: f, head, tails });
   }
+  / matrix_row
   / LPAREN SP? e:additive_expr SP? RPAREN { 
     return { ...e, literal: text() };
   }
@@ -36,6 +37,21 @@ LPAREN
 
 RPAREN
   = ")"
+
+//----
+// Matrix
+//----
+
+LBRACE
+  = "{"
+
+RBRACE
+  = "}"
+
+matrix_row
+  = LBRACE SP? head:additive_expr? tails:(SP? COMMNA SP? additive_expr)* SP? RBRACE {
+    return objects.buildRow({ literal: text(), head, tails })
+  }
 
 //----
 // Number
