@@ -54,15 +54,15 @@ RBRACE
   = "}"
 
 matrix
-  = LBRACE SP? head:matrix_row tails:(SP? SEMI_COLON SP? matrix_row)* SP? RBRACE {
+  = LBRACE SP? head:matrix_row? tails:(SP? SEMI_COLON SP? matrix_row)* SP? RBRACE {
     return objects.buildMatrix({ literal: text(), head, tails });
   }
 
 matrix_row
-  = head:matrix_item? tails:(SP? COMMNA SP? matrix_item)* {
-    return objects.buildArray({ head, tails })
+  = head:matrix_item tails:(SP? COMMNA SP? matrix_item)* {
+    return objects.buildArray({ head, tails });
   }
-  / LBRACE SP? head:matrix_item? tails:(SP? COMMNA SP? matrix_item)* SP? RBRACE {
+  / LBRACE SP? head:matrix_item tails:(SP? COMMNA SP? matrix_item)* SP? RBRACE {
     return objects.buildRow({ literal: text(), head, tails })
   }
 

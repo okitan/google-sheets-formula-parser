@@ -20,7 +20,7 @@ export function buildMatrix({
   tails: Array<[string[] | null, string, string[] | null, ParseResult | ParseResult[]]>;
 }): Matrix {
   const values = [
-    Array.isArray(head) ? head : [head],
+    head ? (Array.isArray(head) ? head : [head]) : [],
     ...tails.map((tail) => (Array.isArray(tail[3]) ? tail[3] : [tail[3]])),
   ].filter((e): e is ParseResult[] => Boolean(e));
 
@@ -47,6 +47,8 @@ export function buildArray({
 }: {
   head: ParseResult;
   tails: Array<[string[] | null, string, string[] | null, ParseResult]>;
-}): ParseResult[] {
-  return [head, ...tails.map((tail) => tail[3])].filter((e): e is ParseResult => Boolean(e));
+}): ParseResult | ParseResult[] {
+  const items = [head, ...tails.map((tail) => tail[3])].filter((e): e is ParseResult => Boolean(e));
+
+  return items;
 }

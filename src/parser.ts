@@ -238,7 +238,7 @@ function peg$parse(input: string, options?: ParseOptions) {
       return objects.buildMatrix({ literal: text(), head, tails });
     };
   const peg$c18 = function(head: any, tails: any): any {
-      return objects.buildArray({ head, tails })
+      return objects.buildArray({ head, tails });
     };
   const peg$c19 = function(head: any, tails: any): any {
       return objects.buildRow({ literal: text(), head, tails })
@@ -967,6 +967,9 @@ function peg$parse(input: string, options?: ParseOptions) {
       }
       if (s2 as any !== peg$FAILED) {
         s3 = peg$parsematrix_row();
+        if (s3 as any === peg$FAILED) {
+          s3 = null;
+        }
         if (s3 as any !== peg$FAILED) {
           s4 = [];
           s5 = peg$currPos;
@@ -1082,9 +1085,6 @@ function peg$parse(input: string, options?: ParseOptions) {
 
     s0 = peg$currPos;
     s1 = peg$parsematrix_item();
-    if (s1 as any === peg$FAILED) {
-      s1 = null;
-    }
     if (s1 as any !== peg$FAILED) {
       s2 = [];
       s3 = peg$currPos;
@@ -1178,9 +1178,6 @@ function peg$parse(input: string, options?: ParseOptions) {
         }
         if (s2 as any !== peg$FAILED) {
           s3 = peg$parsematrix_item();
-          if (s3 as any === peg$FAILED) {
-            s3 = null;
-          }
           if (s3 as any !== peg$FAILED) {
             s4 = [];
             s5 = peg$currPos;
