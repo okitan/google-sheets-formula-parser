@@ -7,6 +7,8 @@ describe("function expression", () => {
     ["N(0)", "N", ["0"]],
     ["N(1 + 2)", "N", ["1 + 2"]],
     ["SUM(1, 2)", "SUM", ["1", "2"]],
+    ["SUM(1, 2, 3)", "SUM", ["1", "2", "3"]],
+    ["SUM((1+2), 3*4, SUM(5))", "SUM", ["(1+2)", "3*4", "SUM(5)"]],
   ])("can be parsed from %s", (literal, name, args) => {
     const parsedArgs = args.map((arg) => parse(arg));
 
