@@ -75,7 +75,7 @@ SIGN
   = (PLUS / MINUS)*
 
 signed_integer
-  = (ZERO  / (NONZERO_DIGIT DIGIT*)) { return new objects.parseAsNumber(text()) }
+  = (ZERO  / (NONZERO_DIGIT DIGIT*)) { return objects.parseAsNumber(text()) }
 
 // float
 float
@@ -87,7 +87,7 @@ float
   } 
 
 frac
-  = DECIMAL_POINT DIGIT+ { return new objects.parseAsNumber(`0${text()}`) }
+  = DECIMAL_POINT DIGIT+ { return objects.parseAsNumber(`0${text()}`) }
 
 //----
 // string

@@ -241,14 +241,14 @@ function peg$parse(input: string, options?: ParseOptions) {
         negative
       })
     };
-  const peg$c19 = function(): any { return new objects.parseAsNumber(text()) };
+  const peg$c19 = function(): any { return objects.parseAsNumber(text()) };
   const peg$c20 = function(i: any, f: any): any {
       return objects.Number({
         literal: text(),
         value: i.value + f.value * (i.negative ? -1 : 1)
       });
     };
-  const peg$c21 = function(): any { return new objects.parseAsNumber(`0${text()}`) };
+  const peg$c21 = function(): any { return objects.parseAsNumber(`0${text()}`) };
   const peg$c22 = /^[a-z]/;
   const peg$c23 = peg$classExpectation([["a", "z"]], false, false);
   const peg$c24 = /^[A-Z]/;
