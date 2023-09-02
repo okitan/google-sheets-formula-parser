@@ -1297,6 +1297,33 @@ function peg$parse(input: string, options?: ParseOptions) {
       peg$currPos = s0;
       s0 = peg$FAILED;
     }
+    if (s0 as any === peg$FAILED) {
+      s0 = peg$currPos;
+      s1 = [];
+      s2 = peg$parseALNUM();
+      if (s2 as any !== peg$FAILED) {
+        while (s2 as any !== peg$FAILED) {
+          s1.push(s2);
+          s2 = peg$parseALNUM();
+        }
+      } else {
+        s1 = peg$FAILED;
+      }
+      if (s1 as any !== peg$FAILED) {
+        s2 = peg$parseEXCLAMATION_MARK();
+        if (s2 as any !== peg$FAILED) {
+          peg$savedPos = s0;
+          s1 = peg$c43(s1);
+          s0 = s1;
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    }
 
     return s0;
   }

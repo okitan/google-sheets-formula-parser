@@ -146,6 +146,7 @@ sheet_name
 
 sheet_name_suffix
    = s:sheet_name EXCLAMATION_MARK { return s }
+   / s:ALNUM+ EXCLAMATION_MARK { return s.join("") }
 
 cell
   = s:sheet_name_suffix? c:COLUMN r:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c, startRow: r}) }
