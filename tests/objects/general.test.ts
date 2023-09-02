@@ -3,7 +3,7 @@ import { parse } from "../../src";
 describe("general expression", () => {
   describe("space", () => {
     // TODO: can be parsed in the future
-    test.each(["1 ", " 1", " 1 "])("considers invalid against '%s'", (s) => {
+    test.each(["1 ", " 1", " 1 ", "AA A"])("considers invalid against '%s'", (s) => {
       expect(() => parse(s)).toThrowError();
     });
   });
@@ -18,6 +18,11 @@ describe("general expression", () => {
 
     test.each(["(", ")", "()", "( )"])("considers invalid against %s", (s) => {
       expect(() => parse(s)).toThrowError();
+    });
+  });
+  describe("named range", () => {
+    test.each(["AAA"])("can be parsed from %s", (literal) => {
+      expect(parse(literal)).toMatchObject({ type: "NamedRange", literal, value: literal });
     });
   });
 });

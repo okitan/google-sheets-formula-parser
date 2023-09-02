@@ -17,9 +17,10 @@ primary_expr
     return { ...e, literal: text() };
   }
 
-// a1 involves number
+// a1 should be treated first because it involves number
+// if named_range is treated first, some a1_notation is considered as named_range
 elem 
-  = a1_notation / number / string
+  = a1_notation / number / string / named_range
 
 //----
 // General
@@ -114,7 +115,7 @@ string
   = DOUBLE_QUOTE s:CHAR_FOR_STRING* DOUBLE_QUOTE { return objects.String({ literal: text(), value: s.join("") }) }
 
 //----
-// symbol
+// cell or range
 //----
 
 SINGLE_QUOTE
@@ -154,6 +155,12 @@ cell
 range
   = s:sheet_name_suffix? c1:COLUMN r1:ROW? DELIMITER c2:COLUMN r2:ROW? { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 }) }
   / s:sheet_name_suffix? c1:COLUMN? r1:ROW DELIMITER c2:COLUMN? r2:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 }) }
+
+//----
+// symbol
+//----
+named_range
+  = (ALNUM / [\u0080-\uFFFF])+ { return objects.NamedRange({ literal: text(), value: text() }) }
 
 //----
 // Operator
