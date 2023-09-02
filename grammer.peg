@@ -19,7 +19,7 @@ primary_expr
 
 // a1 involves number
 elem 
-  = a1_notation/ number / string
+  = a1_notation / number / string
 
 //----
 // General
@@ -101,37 +101,54 @@ UPPER_ALPHA
 
 ALNUM = ALPHA / DIGIT
 
-CHAR 
-  = ALNUM / [_!@#$%^&*()\-+=\[\]{};:',.<>/?\\' '\t\r\n\u0080-\uFFFF]
-ESCAPED_CHAR 
-  = '""'
-
 DOUBLE_QUOTE 
   = '"'
 
 // string
-string = DOUBLE_QUOTE s:(CHAR / ESCAPED_CHAR)* DOUBLE_QUOTE { return objects.String({ literal: text(), value: s.join("") }) }
+// "" means " in DOUBLE_QUOTE
+CHAR_FOR_STRING 
+  = [^"] 
+  / DOUBLE_QUOTE DOUBLE_QUOTE { return `"` }
 
+string 
+  = DOUBLE_QUOTE s:CHAR_FOR_STRING* DOUBLE_QUOTE { return objects.String({ literal: text(), value: s.join("") }) }
 
 //----
 // symbol
 //----
 
+SINGLE_QUOTE
+  = "'"
+
+// '' means ' in SINGLE_QUOTE
+CHAR_IN_SINGLE_QUOTE
+   = [^']
+   / SINGLE_QUOTE SINGLE_QUOTE { return `'` }
+
 // range involves cell
 a1_notation 
-  = range/ cell
+  = range / cell
 
 DELIMITER
   = ":"
 
 COLUMN
-  = [A-Z]+
+  = [A-Z]+ { return text() }
+
+EXCLAMATION_MARK
+  = "!"
 
 ROW
-  = NONZERO_DIGIT DIGIT*
+  = NONZERO_DIGIT DIGIT* { return parseInt(text(), 10) }
+
+sheet_name
+  = SINGLE_QUOTE s:CHAR_IN_SINGLE_QUOTE+ SINGLE_QUOTE { return s.join("") }
+
+sheet_name_suffix
+   = s:sheet_name EXCLAMATION_MARK { return s }
 
 cell
-  = COLUMN ROW { return objects.parseNotation(text()) }
+  = s:sheet_name_suffix? c:COLUMN r:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c, startRow: r}) }
 
 range
   = (COLUMN ROW?) DELIMITER (COLUMN ROW?) { return objects.parseNotation(text()) }

@@ -2,13 +2,21 @@ import { String, parse } from "../../src/";
 import { buildUnAryExpressionMatcher } from "../helpers/parser";
 
 describe(String, () => {
-  test.each(["", "abc", " ", " a b\tc\n", "0", "1", "@", "_!@#$%^&*()-+=[]{};:',.<>/?\\", "𩸽", `""`])(
+  test.each(["", "abc", " ", " a b\tc\n", "0", "1", "@", "_!@#$%^&*()-+=[]{};:',.<>/?\\", "𩸽"])(
     "can be parsed from '%s'",
     (s) => {
       const literal = `"${s}"`;
       expect(parse(literal)).toMatchObject({ type: "String", literal, value: s });
     }
   );
+
+  test.each([
+    [`""`, `"`],
+    [`""""`, `""`],
+  ])(`can be parsed from %s with " escaped`, (s, expected) => {
+    const literal = `"${s}"`;
+    expect(parse(literal)).toMatchObject({ type: "String", literal, value: expected });
+  });
 
   test.each([
     [`"a" & "b"`, "a", "&", "b"],
