@@ -8,8 +8,9 @@ describe(Notation, () => {
     ["A1:B", { startColumnIndex: 0, startRowIndex: 0, endColumnIndex: 1, endRowIndex: undefined }],
     ["A2:3", { startColumnIndex: 0, startRowIndex: 1, endColumnIndex: undefined, endRowIndex: 2 }],
     ["2:3", { startColumnIndex: undefined, startRowIndex: 1, endColumnIndex: undefined, endRowIndex: 2 }],
-    ["'Sheet 1'!A1", { startColumnIndex: 0, startRowIndex: 0, sheetName: "Sheet 1" }],
-    ["0!A1", { startColumnIndex: 0, startRowIndex: 0, sheetName: "0" }],
+    ["'Sheet 1'!A1", { sheetName: "Sheet 1", startColumnIndex: 0, startRowIndex: 0 }],
+    ["0!A1", { sheetName: "0", startColumnIndex: 0, startRowIndex: 0 }],
+    ["'Sheet 1'!A1:B2", { startColumnIndex: 0, startRowIndex: 0, endColumnIndex: 1, endRowIndex: 1 }],
   ])("can be parsed from %s", (s, info) => {
     expect(parse(s)).toMatchObject({
       type: "Notation",

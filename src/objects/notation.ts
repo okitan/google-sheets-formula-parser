@@ -33,22 +33,7 @@ export function buildNotation({
     startColumnIndex: startColumn ? columnToIndex(startColumn) : undefined,
     startRowIndex: startRow ? startRow - 1 : undefined,
     endColumnIndex: endColumn ? columnToIndex(endColumn) : undefined,
-    endRowIndex: endRow - 1,
-  });
-}
-
-export function parseNotation(literal: string): Notation {
-  const [start, end] = literal.split(":");
-
-  const [startColumn, startRow] = start.split(/(\d+)/);
-  const [endColumn, endRow] = end?.split(/(\d+)/) ?? [];
-
-  return Notation({
-    literal,
-    startColumnIndex: startColumn ? columnToIndex(startColumn) : undefined,
-    startRowIndex: startRow ? Number(startRow) - 1 : undefined,
-    endColumnIndex: endColumn ? columnToIndex(endColumn) : undefined,
-    endRowIndex: endRow ? Number(endRow) - 1 : undefined,
+    endRowIndex: endRow ? endRow - 1 : undefined,
   });
 }
 

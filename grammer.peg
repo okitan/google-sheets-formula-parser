@@ -152,8 +152,8 @@ cell
   = s:sheet_name_suffix? c:COLUMN r:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c, startRow: r}) }
 
 range
-  = (COLUMN ROW?) DELIMITER (COLUMN ROW?) { return objects.parseNotation(text()) }
-  / (COLUMN? ROW) DELIMITER (COLUMN? ROW) { return objects.parseNotation(text()) }
+  = s:sheet_name_suffix? c1:COLUMN r1:ROW? DELIMITER c2:COLUMN r2:ROW? { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 }) }
+  / s:sheet_name_suffix? c1:COLUMN? r1:ROW DELIMITER c2:COLUMN? r2:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 }) }
 
 //----
 // Operator
