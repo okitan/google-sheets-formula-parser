@@ -1,3 +1,4 @@
+export * from "./objects/function";
 export * from "./objects/namedRange";
 export * from "./objects/notation";
 export * from "./objects/number";

@@ -12,10 +12,13 @@ multiplicative_expr
     }
 
 primary_expr
-  = elem
+  = f:function LPAREN SP? head:additive_expr? tails:(SP? COMMNA SP? additive_expr)* SP? RPAREN { 
+    return objects.buildFunction({ literal: text(), name: f, head, tails });
+  }
   / LPAREN SP? e:additive_expr SP? RPAREN { 
     return { ...e, literal: text() };
   }
+  / elem
 
 // a1 should be treated first because it involves number
 // if named_range is treated first, some a1_notation is considered as named_range
@@ -112,7 +115,9 @@ CHAR_FOR_STRING
   / DOUBLE_QUOTE DOUBLE_QUOTE { return `"` }
 
 string 
-  = DOUBLE_QUOTE s:CHAR_FOR_STRING* DOUBLE_QUOTE { return objects.String({ literal: text(), value: s.join("") }) }
+  = DOUBLE_QUOTE s:CHAR_FOR_STRING* DOUBLE_QUOTE {
+    return objects.String({ literal: text(), value: s.join("") })
+  }
 
 //----
 // cell or range
@@ -150,17 +155,29 @@ sheet_name_suffix
    / s:ALNUM+ EXCLAMATION_MARK { return s.join("") }
 
 cell
-  = s:sheet_name_suffix? c:COLUMN r:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c, startRow: r}) }
+  = s:sheet_name_suffix? c:COLUMN r:ROW {
+    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c, startRow: r})
+  }
 
 range
-  = s:sheet_name_suffix? c1:COLUMN r1:ROW? DELIMITER c2:COLUMN r2:ROW? { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 }) }
-  / s:sheet_name_suffix? c1:COLUMN? r1:ROW DELIMITER c2:COLUMN? r2:ROW { return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 }) }
+  = s:sheet_name_suffix? c1:COLUMN r1:ROW? DELIMITER c2:COLUMN r2:ROW? {
+    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 })
+  }
+  / s:sheet_name_suffix? c1:COLUMN? r1:ROW DELIMITER c2:COLUMN? r2:ROW {
+    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 })
+  }
 
 //----
 // symbol
 //----
+COMMNA
+   = ","
+
 named_range
   = (ALNUM / [\u0080-\uFFFF])+ { return objects.NamedRange({ literal: text(), value: text() }) }
+
+function
+  = (ALNUM / [\u0080-\uFFFF])+ { return text() }
 
 //----
 // Operator

@@ -22,7 +22,7 @@ export function buildUnaryExpression({
 }: {
   literal: string;
   head: ParseResult;
-  tails: Array<[string, string, string, ParseResult]>;
+  tails: Array<[string[] | null, string, string[] | null, ParseResult]>;
 }): ParseResult {
   return tails.reduce<ParseResult>((left, tail, i) => {
     const [leftSpace, operator, rightSpace, right] = tail;
