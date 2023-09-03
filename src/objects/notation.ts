@@ -1,11 +1,14 @@
+type RowOrColumn = {
+  index: number;
+  fixed?: boolean;
+};
+
 export type Notation = {
   type: "Notation";
   literal: string;
   sheetName?: string;
-  startRowIndex?: number;
-  endRowIndex?: number;
-  startColumnIndex?: number;
-  endColumnIndex?: number;
+  start: { row?: RowOrColumn; column?: RowOrColumn };
+  end?: { row?: RowOrColumn; column?: RowOrColumn };
 };
 
 export function Notation(obj: Omit<Notation, "type">): Notation {
@@ -22,18 +25,22 @@ export function buildNotation({
 }: {
   literal: string;
   sheetName?: string;
-  startColumn?: number;
-  startRow?: number;
-  endColumn?: number;
-  endRow: number;
+  startColumn?: RowOrColumn;
+  startRow?: RowOrColumn;
+  endColumn?: RowOrColumn;
+  endRow?: RowOrColumn;
 }): Notation {
   return Notation({
     literal,
     sheetName,
-    startColumnIndex: startColumn,
-    startRowIndex: startRow,
-    endColumnIndex: endColumn,
-    endRowIndex: endRow,
+    start: {
+      row: startRow ?? undefined,
+      column: startColumn ?? undefined,
+    },
+    end: {
+      row: endRow ?? undefined,
+      column: endColumn ?? undefined,
+    },
   });
 }
 
