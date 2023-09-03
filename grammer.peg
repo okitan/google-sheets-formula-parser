@@ -28,7 +28,7 @@ primary_expr
 // a1 should be treated first because it involves number
 // if named_range is treated first, some a1_notation is considered as named_range
 elem 
-  = a1_notation / number / string / boolean / named_range
+  = a1_notation / number / string / boolean / symbol
 
 //----
 // General
@@ -269,14 +269,14 @@ matrix_item
 // Symbol
 //----
 
-symbol
+symbol_name
   = (ALNUM / [\u0080-\uFFFF])+ { return text() }
 
 function_expr
-  = f:symbol LPAREN SP? head:expr? tails:(SP? COMMNA SP? expr)* SP? RPAREN { 
+  = f:symbol_name LPAREN SP? head:expr? tails:(SP? COMMNA SP? expr)* SP? RPAREN { 
     return objects.buildFunction({ literal: text(), name: f, head, tails });
   }
 
-named_range
-  = symbol { return objects.NamedRange({ literal: text(), value: text() }) }
+symbol
+  = symbol_name { return objects.Symbol({ literal: text(), value: text() }) }
 

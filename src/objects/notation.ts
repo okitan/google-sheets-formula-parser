@@ -30,6 +30,8 @@ export function buildNotation({
   endColumn?: RowOrColumn;
   endRow?: RowOrColumn;
 }): Notation {
+  const end = endColumn || endRow ? { column: endColumn ?? undefined, row: endRow ?? undefined } : undefined;
+
   return Notation({
     literal,
     sheetName,
@@ -37,10 +39,7 @@ export function buildNotation({
       row: startRow ?? undefined,
       column: startColumn ?? undefined,
     },
-    end: {
-      row: endRow ?? undefined,
-      column: endColumn ?? undefined,
-    },
+    end,
   });
 }
 

@@ -335,7 +335,7 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c93 = function(f: any, head: any, tails: any): any { 
       return objects.buildFunction({ literal: text(), name: f, head, tails });
     };
-  const peg$c94 = function(): any { return objects.NamedRange({ literal: text(), value: text() }) };
+  const peg$c94 = function(): any { return objects.Symbol({ literal: text(), value: text() }) };
 
   let peg$currPos = 0;
   let peg$savedPos = 0;
@@ -831,7 +831,7 @@ function peg$parse(input: string, options?: ParseOptions) {
         if (s0 as any === peg$FAILED) {
           s0 = peg$parseboolean();
           if (s0 as any === peg$FAILED) {
-            s0 = peg$parsenamed_range();
+            s0 = peg$parsesymbol();
           }
         }
       }
@@ -2353,7 +2353,7 @@ function peg$parse(input: string, options?: ParseOptions) {
     return s0;
   }
 
-  function peg$parsesymbol(): any {
+  function peg$parsesymbol_name(): any {
     let s0, s1, s2;
 
     s0 = peg$currPos;
@@ -2398,7 +2398,7 @@ function peg$parse(input: string, options?: ParseOptions) {
     let s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
 
     s0 = peg$currPos;
-    s1 = peg$parsesymbol();
+    s1 = peg$parsesymbol_name();
     if (s1 as any !== peg$FAILED) {
       s2 = peg$parseLPAREN();
       if (s2 as any !== peg$FAILED) {
@@ -2525,11 +2525,11 @@ function peg$parse(input: string, options?: ParseOptions) {
     return s0;
   }
 
-  function peg$parsenamed_range(): any {
+  function peg$parsesymbol(): any {
     let s0, s1;
 
     s0 = peg$currPos;
-    s1 = peg$parsesymbol();
+    s1 = peg$parsesymbol_name();
     if (s1 as any !== peg$FAILED) {
       peg$savedPos = s0;
       s1 = peg$c94();
