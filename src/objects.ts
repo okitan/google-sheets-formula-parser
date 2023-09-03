@@ -1,3 +1,4 @@
+export * from "./objects/boolean";
 export * from "./objects/function";
 export * from "./objects/matrix";
 export * from "./objects/namedRange";

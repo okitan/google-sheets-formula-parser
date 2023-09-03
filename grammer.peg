@@ -24,7 +24,7 @@ primary_expr
 // a1 should be treated first because it involves number
 // if named_range is treated first, some a1_notation is considered as named_range
 elem 
-  = a1_notation / number / string / named_range
+  = a1_notation / number / string / boolean / named_range
 
 //----
 // General
@@ -151,6 +151,19 @@ string
   = DOUBLE_QUOTE s:CHAR_FOR_STRING* DOUBLE_QUOTE {
     return objects.String({ literal: text(), value: s.join("") })
   }
+
+//---
+// logical
+//---
+
+boolean
+  = TRUE / FALSE 
+
+TRUE
+  = ("TRUE" / "true") { return objects.Boolean({ literal: text(), value: true }) }
+
+FALSE
+  = ("FALSE" / "false") { return objects.Boolean({ literal: text(), value: false }) }
 
 //----
 // cell or range
