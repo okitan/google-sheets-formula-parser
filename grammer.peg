@@ -20,13 +20,9 @@ multiplicative_expr
     }
 
 primary_expr
-  = f:function LPAREN SP? head:expr? tails:(SP? COMMNA SP? expr)* SP? RPAREN { 
-    return objects.buildFunction({ literal: text(), name: f, head, tails });
-  }
-  / matrix
-  / LPAREN SP? e:expr SP? RPAREN { 
-    return { ...e, literal: text() };
-  }
+  = function_expr
+  / matrix_expr
+  / LPAREN SP? e:expr SP? RPAREN { return { ...e, literal: text() }; }
   / elem
 
 // a1 should be treated first because it involves number
@@ -47,36 +43,47 @@ RPAREN
   = ")"
 
 //----
-// Matrix
+// Operators
 //----
-COMMNA
-  = ","
 
-SEMI_COLON
-  = ";"
+OPERATOR
+  = ADDITIVE_OPERATOR
 
-LBRACE
-  = "{"
+ADDITIVE_OPERATOR
+  = PLUS / MINUS / AMBASSADOR
 
-RBRACE
-  = "}"
+MULTIPLICATIVE_OPERATOR
+  = MULTIPLY / DIVIDE
 
-matrix
-  = LBRACE SP? head:matrix_row? tails:(SP? SEMI_COLON SP? matrix_row)* SP? RBRACE {
-    return objects.buildMatrix({ literal: text(), head, tails });
-  }
+COMPARISON_OPERATOR
+  = NOT_EQUAL / LAGER_EQUAL / LESS_EQUAL / EQUAL / LARGER / LESS
 
-matrix_row
-  = head:matrix_item tails:(SP? COMMNA SP? matrix_item)* {
-    return objects.buildArray({ head, tails });
-  }
-  / LBRACE SP? head:matrix_item tails:(SP? COMMNA SP? matrix_item)* SP? RBRACE {
-    return objects.buildRow({ literal: text(), head, tails })
-  }
+MULTIPLY
+  = "*"
 
-matrix_item
-  = additive_expr
-  / LBRACE SP? e:additive_expr SP? RBRACE { return objects.buildRow({ literal: text(), head: e, tails: [] }) }
+DIVIDE
+  = "/"
+
+AMBASSADOR
+  = "&"
+
+EQUAL
+  = "="
+
+LARGER
+  = ">"
+
+LAGER_EQUAL
+  = ">="
+
+LESS
+  = "<"
+
+LESS_EQUAL
+  = "<="
+
+NOT_EQUAL
+  = "<>"
 
 //----
 // Number
@@ -222,53 +229,51 @@ range
   }
 
 //----
-// symbol
+// Matrix
 //----
-named_range
-  = (ALNUM / [\u0080-\uFFFF])+ { return objects.NamedRange({ literal: text(), value: text() }) }
 
-function
+COMMNA
+  = ","
+
+SEMI_COLON
+  = ";"
+
+LBRACE
+  = "{"
+
+RBRACE
+  = "}"
+
+matrix_expr
+  = LBRACE SP? head:matrix_row? tails:(SP? SEMI_COLON SP? matrix_row)* SP? RBRACE {
+    return objects.buildMatrix({ literal: text(), head, tails });
+  }
+
+matrix_row
+  = head:matrix_item tails:(SP? COMMNA SP? matrix_item)* {
+    return objects.buildArray({ head, tails });
+  }
+  / LBRACE SP? head:matrix_item tails:(SP? COMMNA SP? matrix_item)* SP? RBRACE {
+    return objects.buildRow({ literal: text(), head, tails })
+  }
+
+matrix_item
+  = additive_expr
+  / LBRACE SP? e:additive_expr SP? RBRACE { return objects.buildRow({ literal: text(), head: e, tails: [] }) }
+
+
+//----
+// Symbol
+//----
+
+symbol
   = (ALNUM / [\u0080-\uFFFF])+ { return text() }
 
-//----
-// Operator
-//----
+function_expr
+  = f:symbol LPAREN SP? head:expr? tails:(SP? COMMNA SP? expr)* SP? RPAREN { 
+    return objects.buildFunction({ literal: text(), name: f, head, tails });
+  }
 
-OPERATOR
-  = ADDITIVE_OPERATOR
+named_range
+  = symbol { return objects.NamedRange({ literal: text(), value: text() }) }
 
-ADDITIVE_OPERATOR
-  = PLUS / MINUS / AMBASSADOR
-
-MULTIPLICATIVE_OPERATOR
-  = MULTIPLY / DIVIDE
-
-COMPARISON_OPERATOR
-  = NOT_EQUAL / LAGER_EQUAL / LESS_EQUAL / EQUAL / LARGER / LESS
-
-MULTIPLY
-  = "*"
-
-DIVIDE
-  = "/"
-
-AMBASSADOR
-  = "&"
-
-EQUAL
-  = "="
-
-LARGER
-  = ">"
-
-LAGER_EQUAL
-  = ">="
-
-LESS
-  = "<"
-
-LESS_EQUAL
-  = "<="
-
-NOT_EQUAL
-  = "<>"
