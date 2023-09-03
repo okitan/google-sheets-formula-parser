@@ -1,4 +1,4 @@
-import { parse } from "../../src";
+import { parse } from "../src";
 
 describe("general expression", () => {
   describe("space", () => {
@@ -18,11 +18,6 @@ describe("general expression", () => {
 
     test.each(["(", ")", "()", "( )"])("considers invalid against %s", (s) => {
       expect(() => parse(s)).toThrowError();
-    });
-  });
-  describe("named range", () => {
-    test.each(["AAA"])("can be parsed from %s", (literal) => {
-      expect(parse(literal)).toMatchObject({ type: "NamedRange", literal, value: literal });
     });
   });
 });

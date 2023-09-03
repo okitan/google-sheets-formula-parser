@@ -1,6 +1,6 @@
 type RowOrColumn = {
   index: number;
-  fixed?: boolean;
+  fixed: boolean;
 };
 
 export type Notation = {

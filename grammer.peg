@@ -203,13 +203,13 @@ DOLLAR
   = "$"
 
 COLUMN
-  = d:DOLLAR? c:[A-Z]+ { return { index: objects.columnToIndex(c.join("")) }; }
+  = d:DOLLAR? c:[A-Z]+ { return { index: objects.columnToIndex(c.join("")), fixed: Boolean(d) }; }
 
 EXCLAMATION_MARK
   = "!"
 
 ROW
-  = d:DOLLAR? r:(NONZERO_DIGIT DIGIT*) { return { index: parseInt(r.join(""), 10) - 1 }; }
+  = d:DOLLAR? r:(NONZERO_DIGIT DIGIT*) { return { index: parseInt(r.join(""), 10) - 1, fixed: Boolean(d) }; }
 
 sheet_name
   = SINGLE_QUOTE s:CHAR_IN_SINGLE_QUOTE+ SINGLE_QUOTE { return s.join(""); }

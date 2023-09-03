@@ -3,8 +3,16 @@ import { Notation, columnToIndex } from "../../src/objects";
 describe(Notation, () => {
   test.each([
     ["A1", { start: { column: { index: 0 }, row: { index: 0 } } }],
+    ["$A$1", { start: { column: { index: 0, fixed: true }, row: { index: 0, fixed: true } } }],
     ["AB10", { start: { column: { index: 27 }, row: { index: 9 } } }],
     ["A1:B2", { start: { column: { index: 0 }, row: { index: 0 } }, end: { column: { index: 1 }, row: { index: 1 } } }],
+    [
+      "$A1:B$2",
+      {
+        start: { column: { index: 0, fixed: true }, row: { index: 0, fixed: false } },
+        end: { column: { index: 1, fixed: false }, row: { index: 1, fixed: true } },
+      },
+    ],
     ["A1:B", { start: { column: { index: 0 }, row: { index: 0 } }, end: { column: { index: 1 }, row: undefined } }],
     ["A2:3", { start: { column: { index: 0 }, row: { index: 1 } }, end: { column: undefined, row: { index: 2 } } }],
     ["2:3", { start: { column: undefined, row: { index: 1 } }, end: { column: undefined, row: { index: 2 } } }],

@@ -299,10 +299,10 @@ function peg$parse(input: string, options?: ParseOptions) {
   const peg$c67 = peg$literalExpectation(":", false);
   const peg$c68 = "$";
   const peg$c69 = peg$literalExpectation("$", false);
-  const peg$c70 = function(d: any, c: any): any { return { index: objects.columnToIndex(c.join("")) }; };
+  const peg$c70 = function(d: any, c: any): any { return { index: objects.columnToIndex(c.join("")), fixed: Boolean(d) }; };
   const peg$c71 = "!";
   const peg$c72 = peg$literalExpectation("!", false);
-  const peg$c73 = function(d: any, r: any): any { return { index: parseInt(r.join(""), 10) - 1 }; };
+  const peg$c73 = function(d: any, r: any): any { return { index: parseInt(r.join(""), 10) - 1, fixed: Boolean(d) }; };
   const peg$c74 = function(s: any): any { return s.join(""); };
   const peg$c75 = function(s: any): any { return s; };
   const peg$c76 = function(s: any, c: any, r: any): any {
