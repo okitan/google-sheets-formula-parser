@@ -199,33 +199,36 @@ a1_notation
 DELIMITER
   = ":"
 
+DOLLAR
+  = "$"
+
 COLUMN
-  = [A-Z]+ { return text() }
+  = d:DOLLAR? c:[A-Z]+ { return { index: objects.columnToIndex(c.join("")) }; }
 
 EXCLAMATION_MARK
   = "!"
 
 ROW
-  = NONZERO_DIGIT DIGIT* { return parseInt(text(), 10) }
+  = d:DOLLAR? r:(NONZERO_DIGIT DIGIT*) { return { index: parseInt(r.join(""), 10) - 1 }; }
 
 sheet_name
-  = SINGLE_QUOTE s:CHAR_IN_SINGLE_QUOTE+ SINGLE_QUOTE { return s.join("") }
+  = SINGLE_QUOTE s:CHAR_IN_SINGLE_QUOTE+ SINGLE_QUOTE { return s.join(""); }
 
 sheet_name_suffix
-   = s:sheet_name EXCLAMATION_MARK { return s }
-   / s:ALNUM+ EXCLAMATION_MARK { return s.join("") }
+   = s:sheet_name EXCLAMATION_MARK { return s; }
+   / s:ALNUM+ EXCLAMATION_MARK { return s.join(""); }
 
 cell
   = s:sheet_name_suffix? c:COLUMN r:ROW {
-    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c, startRow: r})
+    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c.index, startRow: r.index });
   }
 
 range
   = s:sheet_name_suffix? c1:COLUMN r1:ROW? DELIMITER c2:COLUMN r2:ROW? {
-    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 })
+    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1.index, startRow: r1?.index, endColumn: c2.index, endRow: r2?.index })
   }
   / s:sheet_name_suffix? c1:COLUMN? r1:ROW DELIMITER c2:COLUMN? r2:ROW {
-    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1, startRow: r1, endColumn: c2, endRow: r2 })
+    return objects.buildNotation({ literal: text(), sheetName: s, startColumn: c1?.index, startRow: r1.index, endColumn: c2?.index, endRow: r2.index })
   }
 
 //----

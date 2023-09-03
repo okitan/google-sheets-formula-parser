@@ -22,18 +22,18 @@ export function buildNotation({
 }: {
   literal: string;
   sheetName?: string;
-  startColumn?: string;
+  startColumn?: number;
   startRow?: number;
-  endColumn?: string;
+  endColumn?: number;
   endRow: number;
 }): Notation {
   return Notation({
     literal,
     sheetName,
-    startColumnIndex: startColumn ? columnToIndex(startColumn) : undefined,
-    startRowIndex: startRow ? startRow - 1 : undefined,
-    endColumnIndex: endColumn ? columnToIndex(endColumn) : undefined,
-    endRowIndex: endRow ? endRow - 1 : undefined,
+    startColumnIndex: startColumn,
+    startRowIndex: startRow,
+    endColumnIndex: endColumn,
+    endRowIndex: endRow,
   });
 }
 
