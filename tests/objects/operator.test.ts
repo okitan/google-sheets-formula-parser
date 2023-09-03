@@ -25,7 +25,14 @@ describe("operator", () => {
   });
 
   describe("of comparison", () => {
-    test.each([["1>2", 1, ">", 2]])(`can be parsed from %s`, (literal, left, operator, right) => {
+    test.each([
+      ["1=1", 1, "=", 1],
+      ["1>2", 1, ">", 2],
+      ["1>=2", 1, ">=", 2],
+      ["1<2", 1, "<", 2],
+      ["1<=2", 1, "<=", 2],
+      ["1<>2", 1, "<>", 2],
+    ])(`can be parsed from %s`, (literal, left, operator, right) => {
       expect(parse(literal)).toMatchObject(buildUnAryExpressionMatcher({ literal, left, operator, right }));
     });
   });
