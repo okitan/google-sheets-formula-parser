@@ -20,11 +20,11 @@ multiplicative_expr
     }
 
 primary_expr
-  = f:function LPAREN SP? head:comparison_expr? tails:(SP? COMMNA SP? comparison_expr)* SP? RPAREN { 
+  = f:function LPAREN SP? head:expr? tails:(SP? COMMNA SP? expr)* SP? RPAREN { 
     return objects.buildFunction({ literal: text(), name: f, head, tails });
   }
   / matrix
-  / LPAREN SP? e:comparison_expr SP? RPAREN { 
+  / LPAREN SP? e:expr SP? RPAREN { 
     return { ...e, literal: text() };
   }
   / elem
