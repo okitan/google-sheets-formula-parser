@@ -2427,6 +2427,9 @@ function peg$parse(input: string, options?: ParseOptions) {
                 }
                 if (s9 as any !== peg$FAILED) {
                   s10 = peg$parsecomparison_expr();
+                  if (s10 as any === peg$FAILED) {
+                    s10 = null;
+                  }
                   if (s10 as any !== peg$FAILED) {
                     s7 = [s7, s8, s9, s10];
                     s6 = s7;
@@ -2462,6 +2465,9 @@ function peg$parse(input: string, options?: ParseOptions) {
                   }
                   if (s9 as any !== peg$FAILED) {
                     s10 = peg$parsecomparison_expr();
+                    if (s10 as any === peg$FAILED) {
+                      s10 = null;
+                    }
                     if (s10 as any !== peg$FAILED) {
                       s7 = [s7, s8, s9, s10];
                       s6 = s7;

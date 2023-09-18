@@ -10,8 +10,10 @@ describe("function expression", () => {
     ["SUM(1, 2)", "SUM", ["1", "2"]],
     ["SUM(0, 1, 2)", "SUM", ["0", "1", "2"]],
     ["SUM((1+2), 3*4, SUM(5))", "SUM", ["(1+2)", "3*4", "SUM(5)"]],
+    ["IF(1=1, 1,)", "IF", ["1=1", "1", null]],
+    ["IF(1=1, , 1)", "IF", ["1=1", null, "1"]],
   ])("can be parsed from %s", (literal, name, args) => {
-    const parsedArgs = args.map((arg) => parse(arg));
+    const parsedArgs = args.map((arg) => (arg !== null ? parse(arg) : null));
 
     expect(parse(literal)).toMatchObject({ type: "Function", literal, name, args: parsedArgs });
   });

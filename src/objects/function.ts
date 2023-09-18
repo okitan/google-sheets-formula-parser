@@ -4,7 +4,7 @@ export type Function = {
   type: "Function";
   literal: string;
   name: string;
-  args: ParseResult[];
+  args: Array<ParseResult | null>;
 };
 
 export function Function({ literal, name, args }: Omit<Function, "type">): Function {
@@ -20,13 +20,13 @@ export function buildFunction({
   literal: string;
   name: string;
   head?: ParseResult;
-  tails: Array<[string[] | null, ",", string[] | null, ParseResult]>;
+  tails: Array<[string[] | null, ",", string[] | null, ParseResult | null]>;
 }): Function {
-  const args = [head, ...tails.map((tail) => tail[3])].filter((e): e is ParseResult => Boolean(e));
+  const args = typeof head === "undefined" ? tails.map((tail) => tail[3]) : [head, ...tails.map((tail) => tail[3])];
 
   return Function({
     literal,
     name,
-    args,
+    args: args.some((e) => Boolean(e)) ? args : [],
   });
 }
