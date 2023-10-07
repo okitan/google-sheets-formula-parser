@@ -11,12 +11,21 @@ export function parse(str: string) {
   return parsed;
 }
 
-type Options = {
-  width?: number;
-  insideMatrix?: boolean;
-};
+// TODO: I'd like to generate
+export type ParseResult = UnaryExpression | Number | String | Boolean | Notation | Symbol | Function | Matrix;
+function assertParsed(parsed: any): asserts parsed is ParseResult {
+  const types = ["UnaryExpression", "Number", "String", "Boolean", "Notation", "Symbol", "Function", "Matrix"];
 
-export function format(parsed: ParseResult, options?: Options): string {
+  if (!types.includes(parsed.type)) throw new Error(`parse result is not one of ${types} but ${parsed.type}`);
+}
+
+export function format(
+  parsed: ParseResult,
+  options?: {
+    width?: number;
+    insideMatrix?: boolean;
+  }
+): string {
   const { width, insideMatrix } = { width: 80, ...options };
 
   const remained = width - 2;
@@ -97,14 +106,6 @@ export function format(parsed: ParseResult, options?: Options): string {
 
       return "{\n  " + rows.map((row) => row.join(", ")).join("\n; ") + "\n}";
   }
-}
-
-// TODO: I'd like to generate
-export type ParseResult = UnaryExpression | Number | String | Boolean | Notation | Symbol | Function | Matrix;
-function assertParsed(parsed: any): asserts parsed is ParseResult {
-  const types = ["UnaryExpression", "Number", "String", "Boolean", "Notation", "Symbol", "Function", "Matrix"];
-
-  if (!types.includes(parsed.type)) throw new Error(`parse result is not one of ${types} but ${parsed.type}`);
 }
 
 function indent(lines: string[]): string {
