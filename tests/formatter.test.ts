@@ -38,20 +38,11 @@ describe(format, () => {
 
   test.each([
     [
-      "2(indent) + 3(digit comma space) * 3 - 1 = 10",
+      "first line is 9 chars",
       "SUM(1,2,3,4,5)",
-      10,
-      `SUM(
-  1, 2, 3,
-  4, 5
-)`,
-    ],
-    [
-      "2(indent) + 3(digit comma space) * 3 - 2 = 9",
-      "SUM(1,2,3)",
       9,
-      `SUM(
-  1, 2, 3
+      `SUM(1, 2,
+  3, 4, 5
 )`,
     ],
     [

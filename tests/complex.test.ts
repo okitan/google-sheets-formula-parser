@@ -1,4 +1,4 @@
-import { parse } from "../src";
+import { format, parse } from "../src";
 
 describe("complex formula", () => {
   test("can be parsed", () => {
@@ -576,6 +576,39 @@ describe("complex formula", () => {
         "name": "BYROW",
         "type": "Function",
       }
+    `);
+  });
+});
+
+describe("complex formula", () => {
+  test("can be parsed", () => {
+    const formula = `BYROW({
+        { "駅", "地区", "メモ" }
+      ; QUERY(IMPORTRANGE(master!$G$2, "'" & master!$B$2 & "'!$A$2:$E"), master!$J$2)
+      ; QUERY(IMPORTRANGE(master!$G$4, "'" & master!$B$4 & "'!$A$2:$E"), master!$J$4)
+      ; QUERY(IMPORTRANGE(master!$G$5, "'" & master!$B$5 & "'!$A$2:$E"), master!$J$5)
+      ; QUERY(IMPORTRANGE(master!$G$6, "'" & master!$B$6 & "'!$A$2:$E"), master!$J$6)
+      }, LAMBDA(e,
+        { 
+          HYPERLINK("#gid=640298097&range=D" & ROW(XLOOKUP(INDEX(e, 1, 1), 駅名列, 駅名列)), INDEX(e, 1, 1)), 
+          INDEX(e, 1, 2),
+          INDEX(e, 1, 3)
+        }
+      ))`;
+
+    expect(format(parse(formula), { width: 120 })).toMatchInlineSnapshot(`
+      "BYROW({
+        "駅", "地区", "メモ"
+      ; QUERY(IMPORTRANGE(master!$G$2, "'" & master!$B$2 & "'!$A$2:$E"), master!$J$2)
+      ; QUERY(IMPORTRANGE(master!$G$4, "'" & master!$B$4 & "'!$A$2:$E"), master!$J$4)
+      ; QUERY(IMPORTRANGE(master!$G$5, "'" & master!$B$5 & "'!$A$2:$E"), master!$J$5)
+      ; QUERY(IMPORTRANGE(master!$G$6, "'" & master!$B$6 & "'!$A$2:$E"), master!$J$6)
+      },
+        LAMBDA(e, {
+          HYPERLINK("#gid=640298097&range=D" & ROW(XLOOKUP(INDEX(e, 1, 1), 駅名列, 駅名列)), INDEX(e, 1, 1)), INDEX(e, 1, 2), INDEX(e, 1, 3)
+        }
+        )
+      )"
     `);
   });
 });

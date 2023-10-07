@@ -81,17 +81,22 @@ export function format(
       const result = parsed.name.toUpperCase() + "(" + formattedArgs.join(", ") + ")";
       if (result.length <= width) return result;
 
-      const lines: string[] = [formattedArgs[0]];
-      formattedArgs.slice(1).forEach((arg) => {
-        if (lines[lines.length - 1].length + arg.length < remained) {
-          lines[lines.length - 1] = lines[lines.length - 1] + ", " + arg;
+      const lines: string[] = [parsed.name.toUpperCase() + "("];
+
+      formattedArgs.forEach((arg, i) => {
+        const argfirstLineLength = arg.startsWith("{") ? arg.split("\n")[0].length : arg.length;
+
+        if (!lines[lines.length - 1].endsWith("(")) lines[lines.length - 1] += ", ";
+
+        if (lines[lines.length - 1].length + argfirstLineLength <= width) {
+          lines[lines.length - 1] += arg;
         } else {
-          lines[lines.length - 1] = lines[lines.length - 1] + ",";
           lines.push(arg);
         }
       });
 
-      return [parsed.name.toUpperCase() + "(", indent(lines), ")"].join("\n");
+      return [lines[0].trim(), indent(lines.slice(1).map((e) => e.trim())), ")"].join("\n");
+
     case "Matrix":
       const rows = parsed.values.map((row) => row.map((e) => format(e, { ...optionsForChildren, insideMatrix: true })));
 
